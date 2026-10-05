@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Berço do Poker - Sistema de Controle</title>
     
     <!-- Fonte Poppins -->
@@ -20,16 +20,16 @@
     <style>
         :root {
             --preto: #080808;
-            --cinza-escuro: #181818;
-            --cinza-painel: #252525;
-            --cinza-hover: #2e2e2e;
+            --cinza-escuro: #121212;
+            --cinza-painel: #1E1E1E;
+            --cinza-hover: #2A2A2A;
             --cinza-claro: #A0A0A0;
             --laranja-principal: #FF6A00;
             --laranja-secundario: #FF8C1A;
             --branco: #FFFFFF;
             --verde-sucesso: #4CAF50;
             --vermelho-erro: #F44336;
-            --sombra-card: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --sombra-card: 0 8px 24px rgba(0, 0, 0, 0.5);
             --sombra-laranja: 0 4px 15px rgba(255, 106, 0, 0.3);
         }
 
@@ -38,41 +38,14 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--cinza-escuro);
             color: var(--branco);
-            overflow-x: hidden;
-            position: relative;
             min-height: 100vh;
-        }
-
-        /* --- NAIPES DE FUNDO ANIMADOS (AJUSTADOS PARA FICAREM SEMPRE AO FUNDO) --- */
-        .background-suits {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: -1; /* Garante que fica estritamente atrás de todo o conteúdo */
-            overflow: hidden;
-        }
-
-        .suit {
-            position: absolute;
-            color: var(--cinza-painel);
-            font-size: 5rem;
-            opacity: 0.2;
-            animation: float 12s infinite ease-in-out alternate;
-            user-select: none;
-            z-index: -1;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg) scale(1); }
-            100% { transform: translateY(-40px) rotate(20deg) scale(1.1); }
+            overflow-x: hidden;
         }
 
         /* --- MARCA REGISTRADA / ASSINATURA --- */
@@ -81,7 +54,7 @@
             text-align: center;
             font-size: 0.8rem;
             color: var(--cinza-claro);
-            opacity: 0.8;
+            opacity: 0.85;
             line-height: 1.6;
             margin-top: 25px;
         }
@@ -94,7 +67,7 @@
             z-index: 99999;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             pointer-events: none;
         }
 
@@ -102,29 +75,29 @@
             pointer-events: auto;
             min-width: 280px;
             max-width: 420px;
-            padding: 16px 20px;
+            padding: 14px 18px;
             border-radius: 12px;
-            background-color: rgba(37, 37, 37, 0.95);
+            background-color: rgba(30, 30, 30, 0.95);
             backdrop-filter: blur(8px);
             color: var(--branco);
             display: flex;
             align-items: center;
-            gap: 14px;
-            font-size: 0.92rem;
+            gap: 12px;
+            font-size: 0.9rem;
             font-weight: 500;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             border-left: 5px solid var(--laranja-principal);
-            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: slideInRight 0.35s ease forwards;
         }
 
         .toast-sucesso { border-left-color: var(--verde-sucesso); }
-        .toast-sucesso i { color: var(--verde-sucesso); font-size: 1.3rem; }
+        .toast-sucesso i { color: var(--verde-sucesso); font-size: 1.2rem; }
 
         .toast-erro { border-left-color: var(--vermelho-erro); }
-        .toast-erro i { color: var(--vermelho-erro); font-size: 1.3rem; }
+        .toast-erro i { color: var(--vermelho-erro); font-size: 1.2rem; }
 
         .toast-alerta { border-left-color: var(--laranja-principal); }
-        .toast-alerta i { color: var(--laranja-principal); font-size: 1.3rem; }
+        .toast-alerta i { color: var(--laranja-principal); font-size: 1.2rem; }
 
         @keyframes slideInRight {
             from { transform: translateX(120%); opacity: 0; }
@@ -132,7 +105,7 @@
         }
 
         .toast.fade-out {
-            animation: fadeOutRight 0.4s forwards ease-in;
+            animation: fadeOutRight 0.35s forwards ease-in;
         }
 
         @keyframes fadeOutRight {
@@ -160,11 +133,6 @@
             margin: 10px auto 20px auto;
             display: block;
             filter: drop-shadow(0 6px 15px rgba(0,0,0,0.6));
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-logo:hover {
-            transform: scale(1.03);
         }
 
         /* --- BOTÕES --- */
@@ -173,26 +141,23 @@
             border: none;
             border-radius: 8px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-size: 0.95rem;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--laranja-principal), var(--laranja-secundario));
             color: var(--branco);
-            padding: 12px 24px;
+            padding: 12px 20px;
             width: 100%;
-            font-size: 1rem;
             box-shadow: var(--sombra-laranja);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 106, 0, 0.5);
-        }
+        .btn-primary:active { transform: scale(0.98); }
 
         .btn-success {
             background-color: var(--verde-sucesso);
@@ -201,8 +166,6 @@
             font-size: 0.85rem;
         }
 
-        .btn-success:hover { background-color: #43a047; }
-
         .btn-danger {
             background-color: var(--vermelho-erro);
             color: white;
@@ -210,29 +173,23 @@
             font-size: 0.85rem;
         }
 
-        .btn-danger:hover { background-color: #e53935; }
-
         .btn-secondary {
             background-color: var(--cinza-painel);
             color: var(--branco);
-            padding: 10px 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 18px;
+            border: 1px solid rgba(255,255,255,0.12);
         }
 
-        .btn-secondary:hover { background-color: var(--cinza-hover); }
-
-        /* --- INPUTS E SELECTS --- */
+        /* --- INPUTS E SELECTS RESPONSIVOS --- */
         input, select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 12px 14px;
             background-color: var(--preto);
-            border: 1px solid var(--cinza-painel);
+            border: 1px solid rgba(255,255,255,0.12);
             color: var(--branco);
             border-radius: 8px;
-            margin-top: 6px;
-            margin-bottom: 16px;
             outline: none;
-            font-size: 0.95rem;
+            font-size: 16px; /* Evita auto-zoom em mobile/iOS */
             transition: border-color 0.3s;
         }
 
@@ -247,19 +204,44 @@
             box-shadow: 0 0 8px rgba(255, 106, 0, 0.3);
         }
 
-        /* --- CLASSE PADRONIZADA DE BARRAS DE FILTRO --- */
+        /* --- ESTRUTURA REFORMULADA DE BARRA DE FILTROS --- */
         .filter-bar {
-            display: flex;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 14px;
             margin-bottom: 25px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-            position: relative;
-            z-index: 2;
+            background-color: var(--cinza-painel);
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-group label {
+            font-size: 0.82rem;
+            color: var(--cinza-claro);
+            font-weight: 500;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-actions button {
+            height: 46px;
+            padding: 0 18px;
+            font-size: 0.9rem;
         }
 
         /* --- VIEWS / TELAS --- */
-        .view { display: none; position: relative; z-index: 1; min-height: 100vh; }
+        .view { display: none; min-height: 100vh; }
         .view.active { display: flex; flex-direction: column; }
 
         /* --- LOGIN --- */
@@ -272,76 +254,56 @@
 
         .login-box {
             background-color: rgba(24, 24, 24, 0.95);
-            padding: 40px 30px;
+            padding: 35px 25px;
             border-radius: 16px;
             width: 100%;
             max-width: 420px;
             text-align: center;
             border: 1px solid rgba(255, 106, 0, 0.2);
             box-shadow: var(--sombra-card);
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 2;
         }
 
         /* --- ÁREA DO JOGADOR --- */
         #player-view {
             padding: 20px;
-            max-width: 650px;
+            max-width: 700px;
             margin: 0 auto;
             width: 100%;
-            position: relative;
-            z-index: 2;
         }
 
         .player-header, .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             background-color: var(--cinza-painel);
-            padding: 15px 20px;
+            padding: 14px 18px;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            z-index: 2;
         }
 
         .card-saldo {
             background: linear-gradient(135deg, var(--cinza-painel) 0%, var(--preto) 100%);
             border: 1px solid var(--laranja-principal);
             border-radius: 16px;
-            padding: 30px 20px;
+            padding: 25px 20px;
             text-align: center;
             margin-bottom: 25px;
             box-shadow: var(--sombra-card);
-            position: relative;
-            overflow: hidden;
-            z-index: 2;
-        }
-
-        .card-saldo::before {
-            content: '♠';
-            position: absolute;
-            right: -20px;
-            bottom: -30px;
-            font-size: 10rem;
-            color: rgba(255, 106, 0, 0.05);
-            pointer-events: none;
         }
 
         .card-saldo h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             margin: 10px 0;
             color: var(--laranja-principal);
             font-weight: 800;
         }
 
         /* --- ÁREA DO ADMINISTRADOR --- */
-        #admin-view { flex-direction: row; position: relative; z-index: 2; }
+        #admin-view { flex-direction: row; }
 
         .sidebar {
-            width: 260px;
+            width: 250px;
             background-color: var(--preto);
             border-right: 1px solid var(--cinza-painel);
             display: flex;
@@ -353,9 +315,9 @@
         .sidebar ul { list-style: none; margin-top: 10px; width: 100%; }
 
         .sidebar ul li {
-            padding: 14px 24px;
+            padding: 14px 20px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.25s;
             border-left: 4px solid transparent;
             display: flex;
             align-items: center;
@@ -370,64 +332,55 @@
             color: var(--laranja-principal);
         }
 
-        .sidebar ul li.highlight {
-            border-left-color: var(--verde-sucesso);
-        }
-
-        .sidebar ul li.highlight:hover, .sidebar ul li.highlight.active {
-            color: var(--verde-sucesso);
-        }
+        .sidebar ul li.highlight { border-left-color: var(--verde-sucesso); }
+        .sidebar ul li.highlight:hover, .sidebar ul li.highlight.active { color: var(--verde-sucesso); }
 
         .admin-content {
             flex: 1;
-            padding: 30px;
+            padding: 25px;
             overflow-y: auto;
             height: 100vh;
-            position: relative;
-            z-index: 2;
         }
 
         /* CARDS E TABELAS */
         .dashboard-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
         }
 
         .stat-card {
             background-color: var(--cinza-painel);
-            padding: 22px;
+            padding: 20px;
             border-radius: 14px;
             border-left: 4px solid var(--laranja-principal);
             box-shadow: var(--sombra-card);
             position: relative;
-            z-index: 2;
         }
 
         .stat-card i {
             position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 1.8rem;
-            color: rgba(255,255,255,0.1);
+            right: 18px;
+            top: 18px;
+            font-size: 1.6rem;
+            color: rgba(255,255,255,0.08);
         }
 
         .stat-card h3 {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--cinza-claro);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .stat-card h2 { font-size: 1.8rem; font-weight: 700; }
+        .stat-card h2 { font-size: 1.6rem; font-weight: 700; }
 
         .charts-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .chart-box {
@@ -435,38 +388,35 @@
             padding: 20px;
             border-radius: 14px;
             border: 1px solid rgba(255,255,255,0.05);
-            position: relative;
-            z-index: 2;
         }
 
         .chart-box h3 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .table-container {
             background-color: var(--cinza-painel);
             border-radius: 14px;
-            padding: 20px;
+            padding: 16px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             box-shadow: var(--sombra-card);
             border: 1px solid rgba(255,255,255,0.05);
-            position: relative;
-            z-index: 2;
+            width: 100%;
         }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--cinza-escuro); font-size: 0.92rem; white-space: nowrap; }
-        th { color: var(--cinza-claro); font-weight: 500; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--cinza-escuro); font-size: 0.88rem; white-space: nowrap; }
+        th { color: var(--cinza-claro); font-weight: 500; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
 
         .badge {
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 600;
             display: inline-flex;
             align-items: center;
@@ -481,49 +431,38 @@
         /* ABA DE FECHAMENTO */
         .fechamento-container {
             background-color: var(--cinza-painel);
-            padding: 30px;
+            padding: 24px;
             border-radius: 14px;
-            max-width: 650px;
-            margin-top: 20px;
+            max-width: 600px;
+            margin-top: 15px;
             box-shadow: var(--sombra-card);
             border: 1px solid rgba(255,255,255,0.05);
-            position: relative;
-            z-index: 2;
         }
 
         .fechamento-info {
             background-color: var(--preto);
-            padding: 18px;
+            padding: 16px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin: 15px 0;
             border: 1px solid var(--cinza-hover);
         }
 
-        .fechamento-info p { margin-bottom: 4px; color: var(--cinza-claro); font-size: 0.88rem; }
-        .fechamento-info strong { color: var(--branco); font-size: 1.15rem; }
+        .fechamento-info p { margin-bottom: 2px; color: var(--cinza-claro); font-size: 0.85rem; }
+        .fechamento-info strong { color: var(--branco); font-size: 1.1rem; }
 
         .resultado-box {
             text-align: center;
-            padding: 22px;
-            margin: 20px 0;
+            padding: 20px;
+            margin: 18px 0;
             border: 2px dashed var(--cinza-claro);
             border-radius: 12px;
-            transition: all 0.3s;
         }
 
-        .resultado-box.positivo {
-            border-color: var(--verde-sucesso);
-            background-color: rgba(76, 175, 80, 0.08);
-        }
+        .resultado-box.positivo { border-color: var(--verde-sucesso); background-color: rgba(76, 175, 80, 0.08); }
+        .resultado-box.negativo { border-color: var(--vermelho-erro); background-color: rgba(244, 67, 54, 0.08); }
+        .resultado-box h2 { font-size: 2.1rem; margin: 6px 0; font-weight: 800; }
 
-        .resultado-box.negativo {
-            border-color: var(--vermelho-erro);
-            background-color: rgba(244, 67, 54, 0.08);
-        }
-
-        .resultado-box h2 { font-size: 2.4rem; margin: 8px 0; font-weight: 800; }
-
-        /* MODAIS COM ANIMAÇÃO ZOOM DE ENTRADA */
+        /* MODAIS */
         .modal {
             display: none;
             position: fixed;
@@ -533,39 +472,23 @@
             justify-content: center;
             align-items: center;
             z-index: 100000;
-            animation: fadeIn 0.25s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            padding: 15px;
         }
 
         .modal-content {
             background-color: var(--cinza-painel);
-            padding: 30px;
+            padding: 25px 20px;
             border-radius: 16px;
-            width: 90%;
-            max-width: 440px;
+            width: 100%;
+            max-width: 420px;
             border: 1px solid var(--laranja-principal);
             box-shadow: var(--sombra-card);
-            animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
         }
 
-        @keyframes scaleUp {
-            from { transform: scale(0.85); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        /* --- RESPONSIVIDADE COMPLETA PARA TELEMÓVEL --- */
+        /* --- RESPONSIVIDADE COMPLETA E PERFEITA (MOBILE) --- */
         @media (max-width: 768px) {
-            .suit {
-                font-size: 3rem;
-                opacity: 0.1; /* Opacidade reduzida para não distrair no telemóvel */
-            }
-
             #toast-container {
                 top: 10px;
                 right: 10px;
@@ -573,10 +496,9 @@
             }
 
             .toast {
-                min-width: auto;
-                width: 100%;
+                min-width: 100%;
                 font-size: 0.85rem;
-                padding: 12px 16px;
+                padding: 12px 14px;
             }
 
             #admin-view { flex-direction: column; }
@@ -585,7 +507,7 @@
                 width: 100%;
                 flex-direction: row;
                 overflow-x: auto;
-                padding: 8px;
+                padding: 6px;
                 border-right: none;
                 border-bottom: 1px solid var(--cinza-painel);
                 position: sticky;
@@ -594,13 +516,13 @@
             }
 
             .sidebar-logo { display: none; }
-            .sidebar ul { display: flex; margin-top: 0; gap: 5px; }
+            .sidebar ul { display: flex; margin-top: 0; gap: 4px; }
             .sidebar ul li { 
                 border-left: none; 
                 border-bottom: 3px solid transparent; 
                 white-space: nowrap; 
                 padding: 10px 14px; 
-                font-size: 0.88rem;
+                font-size: 0.85rem;
             }
 
             .sidebar ul li:hover, .sidebar ul li.active { border-left: none; border-bottom-color: var(--laranja-principal); }
@@ -613,32 +535,34 @@
             }
 
             .player-header, .admin-header {
-                flex-direction: row;
-                flex-wrap: wrap;
+                padding: 12px 14px;
                 gap: 10px;
-                padding: 12px 15px;
             }
 
-            /* Adaptação das barras de filtros em formato de pilha no telemóvel */
+            .player-header h3, .admin-header h3 {
+                font-size: 0.95rem;
+            }
+
+            /* Adaptação das barras de filtros em formato de pilha no celular */
             .filter-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 14px;
             }
 
-            .filter-bar > div {
-                width: 100% !important;
-                min-width: 100% !important;
+            .filter-actions {
+                width: 100%;
+                flex-direction: row;
             }
 
-            .filter-bar > div > button, 
-            .filter-bar > div > div > button {
-                width: 100% !important;
+            .filter-actions button {
+                flex: 1;
+                width: 100%;
             }
 
             .dashboard-cards {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 12px;
             }
 
             .charts-container {
@@ -646,18 +570,12 @@
                 gap: 15px;
             }
 
-            .table-container {
-                padding: 12px;
+            .card-saldo h1 {
+                font-size: 2.2rem;
             }
 
-            th, td {
-                padding: 10px 12px;
-                font-size: 0.82rem;
-            }
-
-            .watermark {
-                font-size: 0.75rem;
-                margin-top: 20px;
+            .fechamento-container {
+                padding: 18px 14px;
             }
         }
     </style>
@@ -667,35 +585,26 @@
     <!-- CONTAINER DE TOASTS NOTIFICAÇÕES -->
     <div id="toast-container"></div>
 
-    <!-- SÍMBOLOS DOS NAIPES DE FUNDO (Z-INDEX -1 FIXO) -->
-    <div class="background-suits">
-        <span class="suit" style="top: 8%; left: 8%;">♠</span>
-        <span class="suit" style="top: 65%; left: 82%; animation-delay: 2s;">♥</span>
-        <span class="suit" style="top: 38%; left: 48%; animation-delay: 4s;">♦</span>
-        <span class="suit" style="top: 82%; left: 18%; animation-delay: 1s;">♣</span>
-        <span class="suit" style="top: 18%; left: 82%; animation-delay: 3s;">♠</span>
-    </div>
-
     <!-- 1. TELA DE LOGIN -->
     <div id="login-view" class="view active">
         <div class="login-box">
             <img src="berco-do-poker-3d-realista.png" alt="Logo Berço do Poker" class="clube-logo" onerror="this.src='https://via.placeholder.com/198/080808/FF6A00?text=BERÇO+DO+POKER'">
             <h2>BERÇO DO POKER</h2>
-            <p class="text-cinza" style="margin-bottom: 25px; font-size: 0.9rem;">Controle de Fichas & Clube VIP</p>
+            <p class="text-cinza" style="margin-bottom: 20px; font-size: 0.88rem;">Controle de Fichas & Clube VIP</p>
             
             <div style="text-align: left;">
-                <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-phone"></i> Telefone (ou "admin")</label>
-                <input type="text" id="login-input" placeholder="(11) 99999-9999">
+                <label style="color: var(--cinza-claro); font-size: 0.82rem;"><i class="fa-solid fa-phone"></i> Telefone (ou "admin")</label>
+                <input type="text" id="login-input" placeholder="(11) 99999-9999" style="margin-top: 4px; margin-bottom: 12px;">
 
-                <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-lock"></i> Senha</label>
-                <input type="password" id="login-password-input" placeholder="Digite sua senha">
+                <label style="color: var(--cinza-claro); font-size: 0.82rem;"><i class="fa-solid fa-lock"></i> Senha</label>
+                <input type="password" id="login-password-input" placeholder="Digite sua senha" style="margin-top: 4px; margin-bottom: 16px;">
             </div>
 
-            <button class="btn-primary" onclick="fazerLogin()" style="margin-top: 10px;">
+            <button class="btn-primary" onclick="fazerLogin()">
                 <i class="fa-solid fa-right-to-bracket"></i> ENTRAR NO SISTEMA
             </button>
 
-            <!-- MARCA REGISTRADA / ASSINATURA NO PAINEL DE LOGIN -->
+            <!-- MARCA REGISTRADA / ASSINATURA -->
             <div class="watermark">
                 &copy; 2026 Berço do Poker<br>
                 Desenvolvido por <span class="text-laranja">Lucas Vieira</span> | Todos os direitos reservados
@@ -706,30 +615,30 @@
     <!-- 2. TELA DO JOGADOR -->
     <div id="player-view" class="view">
         <div class="player-header">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 55px; height: 55px; object-fit: contain;" onerror="this.style.display='none'">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 48px; height: 48px; object-fit: contain;" onerror="this.style.display='none'">
                 <div>
                     <h3 id="player-name-display">Olá, Jogador!</h3>
-                    <span class="text-cinza" style="font-size: 0.8rem;">Área do Jogador</span>
+                    <span class="text-cinza" style="font-size: 0.78rem;">Área do Jogador</span>
                 </div>
             </div>
-            <button class="btn-secondary" onclick="logout()" style="padding: 8px 14px; font-size: 0.85rem;">
+            <button class="btn-secondary" onclick="logout()" style="padding: 8px 12px; font-size: 0.82rem;">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair
             </button>
         </div>
 
         <div class="card-saldo">
-            <p class="text-cinza" style="letter-spacing: 1px; font-size: 0.85rem;"><i class="fa-solid fa-coins"></i> SALDO ATUAL</p>
+            <p class="text-cinza" style="letter-spacing: 1px; font-size: 0.82rem;"><i class="fa-solid fa-coins"></i> SALDO ATUAL</p>
             <h1 id="player-balance-display">R$ 0,00</h1>
-            <p style="font-size: 0.9rem; margin-bottom: 22px; color: var(--cinza-claro);">Fichas disponíveis em mesa</p>
+            <p style="font-size: 0.85rem; margin-bottom: 18px; color: var(--cinza-claro);">Fichas disponíveis em mesa</p>
             <button class="btn-primary" onclick="abrirModalSolicitacao()">
                 <i class="fa-solid fa-circle-plus"></i> SOLICITAR FICHAS
             </button>
         </div>
 
-        <!-- ÁREA DE SOLICITAÇÕES PENDENTES DO JOGADOR -->
-        <div id="player-pendentes-container" style="display: none; margin-bottom: 25px;">
-            <h3 style="margin-bottom: 12px;"><i class="fa-solid fa-clock text-laranja"></i> Solicitações em Andamento</h3>
+        <!-- SOLICITAÇÕES PENDENTES DO JOGADOR -->
+        <div id="player-pendentes-container" style="display: none; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px; font-size: 0.95rem;"><i class="fa-solid fa-clock text-laranja"></i> Solicitações em Andamento</h3>
             <div class="table-container">
                 <table id="player-pendentes-table">
                     <!-- Preenchido via JS -->
@@ -737,28 +646,28 @@
             </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: 30px 0 15px 0;">
-            <h3><i class="fa-solid fa-receipt text-laranja"></i> Meu Extrato</h3>
-            <span class="text-cinza" style="font-size: 0.8rem;">Histórico das sessões</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 25px 0 12px 0;">
+            <h3 style="font-size: 0.95rem;"><i class="fa-solid fa-receipt text-laranja"></i> Meu Extrato</h3>
+            <span class="text-cinza" style="font-size: 0.78rem;">Histórico das sessões</span>
         </div>
 
-        <!-- BARRA DE FILTROS DE PERÍODO NA ÁREA DO JOGADOR (RESPONSIVA) -->
+        <!-- BARRA DE FILTROS DE PERÍODO (JOGADOR) -->
         <div class="filter-bar">
-            <div style="flex: 1; min-width: 170px;">
-                <label style="color: var(--cinza-claro); font-size: 0.82rem;"><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Inicial</label>
-                <input type="datetime-local" id="player-filtro-inicio" style="margin-bottom:0; padding: 10px 12px; font-size: 0.88rem;">
+            <div class="filter-group">
+                <label><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Inicial</label>
+                <input type="datetime-local" id="player-filtro-inicio">
             </div>
 
-            <div style="flex: 1; min-width: 170px;">
-                <label style="color: var(--cinza-claro); font-size: 0.82rem;"><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Final</label>
-                <input type="datetime-local" id="player-filtro-fim" style="margin-bottom:0; padding: 10px 12px; font-size: 0.88rem;">
+            <div class="filter-group">
+                <label><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Final</label>
+                <input type="datetime-local" id="player-filtro-fim">
             </div>
 
-            <div style="display: flex; gap: 8px; width: 100%;">
-                <button class="btn-primary" onclick="atualizarTelaJogador()" style="flex: 1; padding: 10px 18px; font-size: 0.88rem;">
+            <div class="filter-actions">
+                <button class="btn-primary" onclick="atualizarTelaJogador()">
                     <i class="fa-solid fa-magnifying-glass"></i> APLICAR
                 </button>
-                <button class="btn-secondary" onclick="limparFiltrosJogador()" style="flex: 1; padding: 10px 18px; font-size: 0.88rem;">
+                <button class="btn-secondary" onclick="limparFiltrosJogador()">
                     <i class="fa-solid fa-rotate-left"></i> LIMPAR
                 </button>
             </div>
@@ -803,14 +712,14 @@
             
             <!-- SAUDAÇÃO DO ADMINISTRADOR -->
             <div class="admin-header">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 55px; height: 55px; object-fit: contain;" onerror="this.style.display='none'">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 48px; height: 48px; object-fit: contain;" onerror="this.style.display='none'">
                     <div>
                         <h3 id="admin-name-display">Olá, Administrador!</h3>
-                        <span class="text-cinza" style="font-size: 0.8rem;">Painel de Gestão e Controle</span>
+                        <span class="text-cinza" style="font-size: 0.78rem;">Painel de Gestão e Controle</span>
                     </div>
                 </div>
-                <button class="btn-secondary" onclick="logout()" style="padding: 8px 14px; font-size: 0.85rem;">
+                <button class="btn-secondary" onclick="logout()" style="padding: 8px 12px; font-size: 0.82rem;">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair
                 </button>
             </div>
@@ -818,25 +727,25 @@
             <!-- Dashboard -->
             <div id="admin-dashboard" class="admin-section">
                 <h2>Dashboard</h2>
-                <p class="text-cinza" style="margin-bottom: 20px;">Visão geral do clube de poker</p>
+                <p class="text-cinza" style="margin-bottom: 15px; font-size: 0.88rem;">Visão geral do clube de poker</p>
 
-                <!-- BARRA DE FILTROS DE PERÍODO DO DASHBOARD (RESPONSIVA) -->
+                <!-- BARRA DE FILTROS DO DASHBOARD -->
                 <div class="filter-bar">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Inicial</label>
-                        <input type="datetime-local" id="dash-filtro-inicio" style="margin-bottom:0;">
+                    <div class="filter-group">
+                        <label><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Inicial</label>
+                        <input type="datetime-local" id="dash-filtro-inicio">
                     </div>
 
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Final</label>
-                        <input type="datetime-local" id="dash-filtro-fim" style="margin-bottom:0;">
+                    <div class="filter-group">
+                        <label><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Final</label>
+                        <input type="datetime-local" id="dash-filtro-fim">
                     </div>
 
-                    <div style="display: flex; gap: 10px; width: 100%;">
-                        <button class="btn-primary" onclick="carregarAdminDashboard()" style="flex: 1; padding: 12px 20px;">
-                            <i class="fa-solid fa-magnifying-glass"></i> APLICAR FILTROS
+                    <div class="filter-actions">
+                        <button class="btn-primary" onclick="carregarAdminDashboard()">
+                            <i class="fa-solid fa-magnifying-glass"></i> APLICAR
                         </button>
-                        <button class="btn-secondary" onclick="limparFiltrosDashboard()" style="flex: 1; padding: 12px 20px;">
+                        <button class="btn-secondary" onclick="limparFiltrosDashboard()">
                             <i class="fa-solid fa-rotate-left"></i> LIMPAR
                         </button>
                     </div>
@@ -880,13 +789,13 @@
 
             <!-- Solicitações -->
             <div id="admin-solicitacoes" class="admin-section" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                     <div>
                         <h2>Solicitações de Fichas</h2>
-                        <p class="text-cinza">Aprove, recuse ou insira fichas diretamente para um jogador</p>
+                        <p class="text-cinza" style="font-size: 0.88rem;">Aprove, recuse ou insira fichas diretamente para um jogador</p>
                     </div>
                     <button class="btn-primary" onclick="abrirModalNovaSolicitacaoAdmin()" style="width: auto;">
-                        <i class="fa-solid fa-circle-plus"></i> + ENTREGAR FICHAS (ADMIN)
+                        <i class="fa-solid fa-circle-plus"></i> + ENTREGAR FICHAS
                     </button>
                 </div>
                 <div class="table-container">
@@ -898,10 +807,10 @@
 
             <!-- Jogadores -->
             <div id="admin-jogadores" class="admin-section" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                     <div>
                         <h2>Jogadores Cadastrados</h2>
-                        <p class="text-cinza">Gerencie o saldo, senhas e cadastros</p>
+                        <p class="text-cinza" style="font-size: 0.88rem;">Gerencie o saldo, senhas e cadastros</p>
                     </div>
                     <button class="btn-primary" onclick="abrirModalNovoJogador()" style="width: auto;">
                         <i class="fa-solid fa-user-plus"></i> + NOVO JOGADOR
@@ -917,41 +826,41 @@
             <!-- Extrato Geral -->
             <div id="admin-extrato" class="admin-section" style="display: none;">
                 <h2>Extrato Geral do Clube</h2>
-                <p class="text-cinza" style="margin-bottom: 20px;">Todas as movimentações por jogador, tipo e período exato (incluindo viradas de dia)</p>
+                <p class="text-cinza" style="margin-bottom: 15px; font-size: 0.88rem;">Todas as movimentações por jogador, tipo e período exato</p>
                 
-                <!-- BARRA DE FILTROS DO EXTRATO GERAL (RESPONSIVA) -->
+                <!-- BARRA DE FILTROS DO EXTRATO GERAL -->
                 <div class="filter-bar">
-                    <div style="flex: 1; min-width: 180px;">
-                        <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-user text-laranja"></i> Jogador</label>
-                        <select id="extrato-filtro-jogador" style="margin-bottom:0;">
+                    <div class="filter-group">
+                        <label><i class="fa-solid fa-user text-laranja"></i> Jogador</label>
+                        <select id="extrato-filtro-jogador">
                             <option value="todos">Todos os Jogadores</option>
                         </select>
                     </div>
 
-                    <div style="flex: 1; min-width: 180px;">
-                        <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-filter text-laranja"></i> Tipo de Operação</label>
-                        <select id="extrato-filtro-tipo" style="margin-bottom:0;">
+                    <div class="filter-group">
+                        <label><i class="fa-solid fa-filter text-laranja"></i> Tipo de Operação</label>
+                        <select id="extrato-filtro-tipo">
                             <option value="todos">Todos os Tipos</option>
                             <option value="entradas">Apenas Lançamentos (Entradas)</option>
                             <option value="fechamentos">Apenas Fechamentos</option>
                         </select>
                     </div>
 
-                    <div style="flex: 1; min-width: 190px;">
-                        <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Inicial</label>
-                        <input type="datetime-local" id="extrato-filtro-inicio" style="margin-bottom:0;">
+                    <div class="filter-group">
+                        <label><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Inicial</label>
+                        <input type="datetime-local" id="extrato-filtro-inicio">
                     </div>
 
-                    <div style="flex: 1; min-width: 190px;">
-                        <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Final</label>
-                        <input type="datetime-local" id="extrato-filtro-fim" style="margin-bottom:0;">
+                    <div class="filter-group">
+                        <label><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Final</label>
+                        <input type="datetime-local" id="extrato-filtro-fim">
                     </div>
 
-                    <div style="display: flex; gap: 10px; width: 100%;">
-                        <button class="btn-primary" onclick="carregarAdminExtrato()" style="flex: 1; padding: 12px 20px;">
+                    <div class="filter-actions" style="grid-column: 1 / -1;">
+                        <button class="btn-primary" onclick="carregarAdminExtrato()" style="flex: 1;">
                             <i class="fa-solid fa-magnifying-glass"></i> APLICAR
                         </button>
-                        <button class="btn-secondary" onclick="limparFiltrosExtrato()" style="flex: 1; padding: 12px 20px;">
+                        <button class="btn-secondary" onclick="limparFiltrosExtrato()" style="flex: 1;">
                             <i class="fa-solid fa-rotate-left"></i> LIMPAR
                         </button>
                     </div>
@@ -978,22 +887,22 @@
             <!-- Aba Fechamento -->
             <div id="admin-fechamento" class="admin-section" style="display: none;">
                 <h2><i class="fa-solid fa-flag-checkered text-verde"></i> Fechamento de Sessão</h2>
-                <p class="text-cinza">Encerre a mesa do jogador e calcule com precisão o lucro (+) ou prejuízo (-)</p>
+                <p class="text-cinza" style="font-size: 0.88rem;">Encerre a mesa do jogador e calcule com precisão o resultado</p>
 
                 <div class="fechamento-container">
-                    <label style="color: var(--cinza-claro);"><i class="fa-solid fa-user"></i> Selecione o Jogador para Encerramento</label>
-                    <select id="fechamento-select" onchange="calcularFechamento()"></select>
+                    <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-user"></i> Selecione o Jogador para Encerramento</label>
+                    <select id="fechamento-select" onchange="calcularFechamento()" style="margin-top: 4px; margin-bottom: 12px;"></select>
 
                     <div class="fechamento-info">
                         <p>Saldo Atual em Fichas Registrado:</p>
                         <strong id="fechamento-saldo-sistema" class="text-laranja">R$ 0,00</strong>
                     </div>
 
-                    <label style="color: var(--cinza-claro);"><i class="fa-solid fa-coins"></i> Com quantas fichas o jogador está saindo da mesa? (R$)</label>
-                    <input type="number" id="fechamento-input-saida" placeholder="Ex: 1500" onkeyup="calcularFechamento()" onchange="calcularFechamento()">
+                    <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-coins"></i> Com quantas fichas o jogador está saindo da mesa? (R$)</label>
+                    <input type="number" id="fechamento-input-saida" placeholder="Ex: 1500" onkeyup="calcularFechamento()" onchange="calcularFechamento()" style="margin-top: 4px; margin-bottom: 12px;">
 
                     <div id="fechamento-resultado-box" class="resultado-box">
-                        <p id="fechamento-status-texto" class="text-cinza">Selecione o jogador e digite as fichas de saída</p>
+                        <p id="fechamento-status-texto" class="text-cinza" style="font-size: 0.85rem;">Selecione o jogador e digite as fichas de saída</p>
                         <h2 id="fechamento-valor-resultado">R$ 0,00</h2>
                     </div>
 
@@ -1010,9 +919,9 @@
     <div id="modal-confirmacao" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 10px;" id="confirm-titulo"><i class="fa-solid fa-circle-question text-laranja"></i> Confirmação</h3>
-            <p class="text-cinza" id="confirm-mensagem" style="font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; white-space: pre-line;"></p>
+            <p class="text-cinza" id="confirm-mensagem" style="font-size: 0.92rem; margin-bottom: 20px; line-height: 1.5; white-space: pre-line;"></p>
 
-            <div style="display: flex; gap: 12px;">
+            <div style="display: flex; gap: 10px;">
                 <button class="btn-secondary" style="flex: 1;" id="confirm-btn-nao">
                     <i class="fa-solid fa-xmark"></i> CANCELAR
                 </button>
@@ -1027,12 +936,12 @@
     <div id="modal-solicitar" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-coins text-laranja"></i> Solicitar Fichas</h3>
-            <p class="text-cinza" style="font-size: 0.88rem; margin-bottom: 20px;">Digite a quantidade de fichas desejada para enviar ao clube.</p>
+            <p class="text-cinza" style="font-size: 0.85rem; margin-bottom: 15px;">Digite a quantidade de fichas desejada para enviar ao clube.</p>
             
-            <label style="color: var(--cinza-claro); font-size: 0.85rem;">Valor da Solicitação (R$)</label>
-            <input type="number" id="input-solicitacao" placeholder="Ex: 500">
+            <label style="color: var(--cinza-claro); font-size: 0.82rem;">Valor da Solicitação (R$)</label>
+            <input type="number" id="input-solicitacao" placeholder="Ex: 500" style="margin-top:4px; margin-bottom:15px;">
 
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <div style="display: flex; gap: 10px;">
                 <button class="btn-secondary" style="flex: 1;" onclick="fecharModais()">CANCELAR</button>
                 <button class="btn-primary" style="flex: 1;" onclick="enviarSolicitacao()">ENVIAR</button>
             </div>
@@ -1043,17 +952,17 @@
     <div id="modal-nova-solicitacao-admin" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-user-shield text-laranja"></i> Entregar Fichas (Admin)</h3>
-            <p class="text-cinza" style="font-size: 0.88rem; margin-bottom: 20px;">Selecione o jogador para creditar as fichas diretamente no seu saldo sem necessidade de aprovação posterior.</p>
+            <p class="text-cinza" style="font-size: 0.85rem; margin-bottom: 15px;">Credite fichas diretamente no saldo do jogador selecionado.</p>
             
-            <label style="color: var(--cinza-claro); font-size: 0.85rem;">Selecione o Jogador</label>
-            <select id="admin-solicitar-player-select"></select>
+            <label style="color: var(--cinza-claro); font-size: 0.82rem;">Selecione o Jogador</label>
+            <select id="admin-solicitar-player-select" style="margin-top:4px; margin-bottom:12px;"></select>
 
-            <label style="color: var(--cinza-claro); font-size: 0.85rem;">Quantidade de Fichas (R$)</label>
-            <input type="number" id="admin-solicitar-amount" placeholder="Ex: 1000">
+            <label style="color: var(--cinza-claro); font-size: 0.82rem;">Quantidade de Fichas (R$)</label>
+            <input type="number" id="admin-solicitar-amount" placeholder="Ex: 1000" style="margin-top:4px; margin-bottom:15px;">
 
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <div style="display: flex; gap: 10px;">
                 <button class="btn-secondary" style="flex: 1;" onclick="fecharModais()">CANCELAR</button>
-                <button class="btn-primary" style="flex: 1;" onclick="salvarSolicitacaoAdmin()">ENTREGAR FICHAS DIRETO</button>
+                <button class="btn-primary" style="flex: 1;" onclick="salvarSolicitacaoAdmin()">ENTREGAR DIRETO</button>
             </div>
         </div>
     </div>
@@ -1062,18 +971,18 @@
     <div id="modal-novo-jogador" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-user-plus text-laranja"></i> Novo Jogador</h3>
-            <p class="text-cinza" style="font-size: 0.88rem; margin-bottom: 20px;">Cadastre os dados e defina a senha de acesso inicial do jogador.</p>
+            <p class="text-cinza" style="font-size: 0.85rem; margin-bottom: 15px;">Cadastre os dados e defina a senha de acesso inicial do jogador.</p>
             
-            <label style="color: var(--cinza-claro); font-size: 0.85rem;">Nome Completo</label>
-            <input type="text" id="novo-nome" placeholder="Ex: Lucas Gabriel">
+            <label style="color: var(--cinza-claro); font-size: 0.82rem;">Nome Completo</label>
+            <input type="text" id="novo-nome" placeholder="Ex: Lucas Gabriel" style="margin-top:4px; margin-bottom:10px;">
 
-            <label style="color: var(--cinza-claro); font-size: 0.85rem;">Telefone (DDD + Número)</label>
-            <input type="text" id="novo-telefone" placeholder="(11) 99999-8888">
+            <label style="color: var(--cinza-claro); font-size: 0.82rem;">Telefone (DDD + Número)</label>
+            <input type="text" id="novo-telefone" placeholder="(11) 99999-8888" style="margin-top:4px; margin-bottom:10px;">
 
-            <label style="color: var(--cinza-claro); font-size: 0.85rem;">Senha de Acesso</label>
-            <input type="password" id="novo-senha" placeholder="Digite a senha do jogador">
+            <label style="color: var(--cinza-claro); font-size: 0.82rem;">Senha de Acesso</label>
+            <input type="password" id="novo-senha" placeholder="Digite a senha do jogador" style="margin-top:4px; margin-bottom:15px;">
 
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <div style="display: flex; gap: 10px;">
                 <button class="btn-secondary" style="flex: 1;" onclick="fecharModais()">CANCELAR</button>
                 <button class="btn-primary" style="flex: 1;" onclick="salvarNovoJogador()">CADASTRAR</button>
             </div>
@@ -1084,17 +993,17 @@
     <div id="modal-editar-jogador" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-user-pen text-laranja"></i> Editar Jogador</h3>
-            <p class="text-cinza" style="font-size: 0.88rem; margin-bottom: 20px;">Atualize o nome e o número de telefone do jogador.</p>
+            <p class="text-cinza" style="font-size: 0.85rem; margin-bottom: 15px;">Atualize o nome e o número de telefone do jogador.</p>
 
             <input type="hidden" id="editar-player-id">
 
-            <label style="color: var(--cinza-claro); font-size: 0.85rem;">Nome Completo</label>
-            <input type="text" id="editar-nome" placeholder="Ex: Lucas Gabriel">
+            <label style="color: var(--cinza-claro); font-size: 0.82rem;">Nome Completo</label>
+            <input type="text" id="editar-nome" placeholder="Ex: Lucas Gabriel" style="margin-top:4px; margin-bottom:10px;">
 
-            <label style="color: var(--cinza-claro); font-size: 0.85rem;">Telefone (DDD + Número)</label>
-            <input type="text" id="editar-telefone" placeholder="(11) 99999-8888">
+            <label style="color: var(--cinza-claro); font-size: 0.82rem;">Telefone (DDD + Número)</label>
+            <input type="text" id="editar-telefone" placeholder="(11) 99999-8888" style="margin-top:4px; margin-bottom:15px;">
 
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button class="btn-primary" onclick="salvarEdicaoJogador()">
                     <i class="fa-solid fa-floppy-disk"></i> SALVAR ALTERAÇÕES
                 </button>
@@ -1102,7 +1011,7 @@
                 <div style="display: flex; gap: 10px;">
                     <button class="btn-secondary" style="flex: 1;" onclick="fecharModais()">CANCELAR</button>
                     <button class="btn-danger" style="flex: 1;" onclick="excluirJogador()">
-                        <i class="fa-solid fa-trash"></i> EXCLUIR JOGADOR
+                        <i class="fa-solid fa-trash"></i> EXCLUIR
                     </button>
                 </div>
             </div>
@@ -1113,14 +1022,14 @@
     <div id="modal-alterar-senha" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-key text-laranja"></i> Alterar Senha</h3>
-            <p class="text-cinza" style="font-size: 0.88rem; margin-bottom: 15px;">Jogador: <b id="alterar-senha-nome" class="text-laranja"></b></p>
+            <p class="text-cinza" style="font-size: 0.85rem; margin-bottom: 12px;">Jogador: <b id="alterar-senha-nome" class="text-laranja"></b></p>
             
             <input type="hidden" id="alterar-senha-player-id">
 
-            <label style="color: var(--cinza-claro); font-size: 0.85rem;">Nova Senha</label>
-            <input type="password" id="nova-senha-input" placeholder="Digite a nova senha">
+            <label style="color: var(--cinza-claro); font-size: 0.82rem;">Nova Senha</label>
+            <input type="password" id="nova-senha-input" placeholder="Digite a nova senha" style="margin-top:4px; margin-bottom:15px;">
 
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <div style="display: flex; gap: 10px;">
                 <button class="btn-secondary" style="flex: 1;" onclick="fecharModais()">CANCELAR</button>
                 <button class="btn-primary" style="flex: 1;" onclick="salvarNovaSenha()">SALVAR SENHA</button>
             </div>
@@ -1155,8 +1064,8 @@
 
             setTimeout(() => {
                 toast.classList.add('fade-out');
-                setTimeout(() => toast.remove(), 400);
-            }, 3500);
+                setTimeout(() => toast.remove(), 350);
+            }, 3200);
         }
 
         // --- SISTEMA DE CONFIRMAÇÃO PROMISE ---
@@ -1306,7 +1215,7 @@
                 containerPendentes.style.display = 'none';
             }
 
-            // 2. Carregar Extrato de Transações do Jogador com Filtro por Período
+            // 2. Carregar Extrato de Transações do Jogador
             const { data: transactions } = await _supabase
                 .from('transactions')
                 .select('*')
@@ -1357,7 +1266,7 @@
             document.getElementById('player-filtro-inicio').value = '';
             document.getElementById('player-filtro-fim').value = '';
             atualizarTelaJogador();
-            mostrarToast('Filtros do extrato redefinidos.', 'alerta');
+            mostrarToast('Filtros redefinidos.', 'alerta');
         }
 
         function abrirModalSolicitacao() { document.getElementById('modal-solicitar').style.display = 'flex'; }
@@ -1457,7 +1366,6 @@
             if(chartMovimentacao) chartMovimentacao.destroy();
             if(chartSolicitacoes) chartSolicitacoes.destroy();
 
-            // 1. LÓGICA DINÂMICA PARA O GRÁFICO DE MOVIMENTAÇÃO (ÚLTIMOS 7 DIAS)
             const labels7Dias = [];
             const dadosMovimentacao = [0, 0, 0, 0, 0, 0, 0];
             const mapDatas = {};
@@ -1586,7 +1494,6 @@
             document.getElementById('modal-nova-solicitacao-admin').style.display = 'flex';
         }
 
-        // LANÇAMENTO DIRETO E AUTOMATICAMENTE APROVADO PELO ADMIN
         async function salvarSolicitacaoAdmin() {
             const playerId = document.getElementById('admin-solicitar-player-select').value;
             const valor = parseFloat(document.getElementById('admin-solicitar-amount').value);

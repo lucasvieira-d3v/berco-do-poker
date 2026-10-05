@@ -48,7 +48,7 @@
             min-height: 100vh;
         }
 
-        /* --- NAIPES DE FUNDO ANIMADOS --- */
+        /* --- NAIPES DE FUNDO ANIMADOS (AJUSTADOS PARA FICAREM SEMPRE AO FUNDO) --- */
         .background-suits {
             position: fixed;
             top: 0;
@@ -56,7 +56,7 @@
             width: 100vw;
             height: 100vh;
             pointer-events: none;
-            z-index: 0;
+            z-index: -1; /* Garante que fica estritamente atrás de todo o conteúdo */
             overflow: hidden;
         }
 
@@ -64,9 +64,10 @@
             position: absolute;
             color: var(--cinza-painel);
             font-size: 5rem;
-            opacity: 0.25;
+            opacity: 0.2;
             animation: float 12s infinite ease-in-out alternate;
             user-select: none;
+            z-index: -1;
         }
 
         @keyframes float {
@@ -74,17 +75,15 @@
             100% { transform: translateY(-40px) rotate(20deg) scale(1.1); }
         }
 
-        /* --- MARCA REGISTRADA (WATERMARK) --- */
+        /* --- MARCA REGISTRADA / ASSINATURA --- */
         .watermark {
-            position: absolute;
-            bottom: 25px;
-            left: 0;
             width: 100%;
             text-align: center;
             font-size: 0.8rem;
             color: var(--cinza-claro);
             opacity: 0.8;
             line-height: 1.6;
+            margin-top: 25px;
         }
 
         /* --- SISTEMA DE TOASTS NOTIFICAÇÕES ANIMADAS --- */
@@ -101,7 +100,7 @@
 
         .toast {
             pointer-events: auto;
-            min-width: 300px;
+            min-width: 280px;
             max-width: 420px;
             padding: 16px 20px;
             border-radius: 12px;
@@ -248,6 +247,17 @@
             box-shadow: 0 0 8px rgba(255, 106, 0, 0.3);
         }
 
+        /* --- CLASSE PADRONIZADA DE BARRAS DE FILTRO --- */
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            position: relative;
+            z-index: 2;
+        }
+
         /* --- VIEWS / TELAS --- */
         .view { display: none; position: relative; z-index: 1; min-height: 100vh; }
         .view.active { display: flex; flex-direction: column; }
@@ -270,6 +280,7 @@
             border: 1px solid rgba(255, 106, 0, 0.2);
             box-shadow: var(--sombra-card);
             backdrop-filter: blur(10px);
+            position: relative;
             z-index: 2;
         }
 
@@ -279,6 +290,8 @@
             max-width: 650px;
             margin: 0 auto;
             width: 100%;
+            position: relative;
+            z-index: 2;
         }
 
         .player-header, .admin-header {
@@ -290,6 +303,8 @@
             padding: 15px 20px;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 2;
         }
 
         .card-saldo {
@@ -302,6 +317,7 @@
             box-shadow: var(--sombra-card);
             position: relative;
             overflow: hidden;
+            z-index: 2;
         }
 
         .card-saldo::before {
@@ -322,7 +338,7 @@
         }
 
         /* --- ÁREA DO ADMINISTRADOR --- */
-        #admin-view { flex-direction: row; }
+        #admin-view { flex-direction: row; position: relative; z-index: 2; }
 
         .sidebar {
             width: 260px;
@@ -367,6 +383,8 @@
             padding: 30px;
             overflow-y: auto;
             height: 100vh;
+            position: relative;
+            z-index: 2;
         }
 
         /* CARDS E TABELAS */
@@ -384,6 +402,7 @@
             border-left: 4px solid var(--laranja-principal);
             box-shadow: var(--sombra-card);
             position: relative;
+            z-index: 2;
         }
 
         .stat-card i {
@@ -416,6 +435,8 @@
             padding: 20px;
             border-radius: 14px;
             border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 2;
         }
 
         .chart-box h3 {
@@ -431,12 +452,15 @@
             border-radius: 14px;
             padding: 20px;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             box-shadow: var(--sombra-card);
             border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 2;
         }
 
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--cinza-escuro); font-size: 0.92rem; }
+        th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--cinza-escuro); font-size: 0.92rem; white-space: nowrap; }
         th { color: var(--cinza-claro); font-weight: 500; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.5px; }
 
         .badge {
@@ -463,6 +487,8 @@
             margin-top: 20px;
             box-shadow: var(--sombra-card);
             border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 2;
         }
 
         .fechamento-info {
@@ -506,7 +532,7 @@
             backdrop-filter: blur(6px);
             justify-content: center;
             align-items: center;
-            z-index: 10000;
+            z-index: 100000;
             animation: fadeIn 0.25s ease;
         }
 
@@ -524,6 +550,8 @@
             border: 1px solid var(--laranja-principal);
             box-shadow: var(--sombra-card);
             animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes scaleUp {
@@ -531,23 +559,106 @@
             to { transform: scale(1); opacity: 1; }
         }
 
-        /* RESPONSIVIDADE */
+        /* --- RESPONSIVIDADE COMPLETA PARA TELEMÓVEL --- */
         @media (max-width: 768px) {
+            .suit {
+                font-size: 3rem;
+                opacity: 0.1; /* Opacidade reduzida para não distrair no telemóvel */
+            }
+
+            #toast-container {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+            }
+
+            .toast {
+                min-width: auto;
+                width: 100%;
+                font-size: 0.85rem;
+                padding: 12px 16px;
+            }
+
             #admin-view { flex-direction: column; }
+
             .sidebar {
                 width: 100%;
                 flex-direction: row;
                 overflow-x: auto;
-                padding: 10px;
+                padding: 8px;
                 border-right: none;
                 border-bottom: 1px solid var(--cinza-painel);
+                position: sticky;
+                top: 0;
+                z-index: 100;
             }
+
             .sidebar-logo { display: none; }
-            .sidebar ul { display: flex; margin-top: 0; }
-            .sidebar ul li { border-left: none; border-bottom: 3px solid transparent; white-space: nowrap; padding: 10px 16px; }
+            .sidebar ul { display: flex; margin-top: 0; gap: 5px; }
+            .sidebar ul li { 
+                border-left: none; 
+                border-bottom: 3px solid transparent; 
+                white-space: nowrap; 
+                padding: 10px 14px; 
+                font-size: 0.88rem;
+            }
+
             .sidebar ul li:hover, .sidebar ul li.active { border-left: none; border-bottom-color: var(--laranja-principal); }
             .sidebar ul li.highlight { border-left: none; border-bottom-color: var(--verde-sucesso); }
-            .admin-content { height: auto; padding: 15px; }
+
+            .admin-content { 
+                height: auto; 
+                padding: 15px 12px; 
+                overflow-y: visible;
+            }
+
+            .player-header, .admin-header {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 12px 15px;
+            }
+
+            /* Adaptação das barras de filtros em formato de pilha no telemóvel */
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .filter-bar > div {
+                width: 100% !important;
+                min-width: 100% !important;
+            }
+
+            .filter-bar > div > button, 
+            .filter-bar > div > div > button {
+                width: 100% !important;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .table-container {
+                padding: 12px;
+            }
+
+            th, td {
+                padding: 10px 12px;
+                font-size: 0.82rem;
+            }
+
+            .watermark {
+                font-size: 0.75rem;
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
@@ -556,7 +667,7 @@
     <!-- CONTAINER DE TOASTS NOTIFICAÇÕES -->
     <div id="toast-container"></div>
 
-    <!-- SÍMBOLOS DOS NAIPES DE FUNDO -->
+    <!-- SÍMBOLOS DOS NAIPES DE FUNDO (Z-INDEX -1 FIXO) -->
     <div class="background-suits">
         <span class="suit" style="top: 8%; left: 8%;">♠</span>
         <span class="suit" style="top: 65%; left: 82%; animation-delay: 2s;">♥</span>
@@ -583,16 +694,12 @@
             <button class="btn-primary" onclick="fazerLogin()" style="margin-top: 10px;">
                 <i class="fa-solid fa-right-to-bracket"></i> ENTRAR NO SISTEMA
             </button>
-            
-            <p class="text-cinza" style="font-size: 0.8rem; margin-top: 20px; line-height: 1.4;">
-                Utilize o telefone e a senha cadastrados no clube.<br>
-            </p>
-        </div>
 
-        <!-- MARCA REGISTRADA / ASSINATURA -->
-        <div class="watermark">
-            &copy; 2026 Berço do Poker<br>
-            Desenvolvido por <span class="text-laranja">Lucas Vieira</span> | Todos os direitos reservados
+            <!-- MARCA REGISTRADA / ASSINATURA NO PAINEL DE LOGIN -->
+            <div class="watermark">
+                &copy; 2026 Berço do Poker<br>
+                Desenvolvido por <span class="text-laranja">Lucas Vieira</span> | Todos os direitos reservados
+            </div>
         </div>
     </div>
 
@@ -600,7 +707,7 @@
     <div id="player-view" class="view">
         <div class="player-header">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 61px; height: 61px; object-fit: contain;" onerror="this.style.display='none'">
+                <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 55px; height: 55px; object-fit: contain;" onerror="this.style.display='none'">
                 <div>
                     <h3 id="player-name-display">Olá, Jogador!</h3>
                     <span class="text-cinza" style="font-size: 0.8rem;">Área do Jogador</span>
@@ -635,8 +742,8 @@
             <span class="text-cinza" style="font-size: 0.8rem;">Histórico das sessões</span>
         </div>
 
-        <!-- BARRA DE FILTROS DE PERÍODO NA ÁREA DO JOGADOR -->
-        <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: flex-end;">
+        <!-- BARRA DE FILTROS DE PERÍODO NA ÁREA DO JOGADOR (RESPONSIVA) -->
+        <div class="filter-bar">
             <div style="flex: 1; min-width: 170px;">
                 <label style="color: var(--cinza-claro); font-size: 0.82rem;"><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Inicial</label>
                 <input type="datetime-local" id="player-filtro-inicio" style="margin-bottom:0; padding: 10px 12px; font-size: 0.88rem;">
@@ -647,11 +754,11 @@
                 <input type="datetime-local" id="player-filtro-fim" style="margin-bottom:0; padding: 10px 12px; font-size: 0.88rem;">
             </div>
 
-            <div style="display: flex; gap: 8px;">
-                <button class="btn-primary" onclick="atualizarTelaJogador()" style="width: auto; padding: 10px 18px; font-size: 0.88rem;">
+            <div style="display: flex; gap: 8px; width: 100%;">
+                <button class="btn-primary" onclick="atualizarTelaJogador()" style="flex: 1; padding: 10px 18px; font-size: 0.88rem;">
                     <i class="fa-solid fa-magnifying-glass"></i> APLICAR
                 </button>
-                <button class="btn-secondary" onclick="limparFiltrosJogador()" style="width: auto; padding: 10px 18px; font-size: 0.88rem;">
+                <button class="btn-secondary" onclick="limparFiltrosJogador()" style="flex: 1; padding: 10px 18px; font-size: 0.88rem;">
                     <i class="fa-solid fa-rotate-left"></i> LIMPAR
                 </button>
             </div>
@@ -686,7 +793,7 @@
                     <i class="fa-solid fa-flag-checkered"></i> Fechamento
                 </li>
                 <li onclick="logout()" style="margin-top: auto; color: var(--vermelho-erro);">
-                    <i class="fa-solid fa-power-off"></i> Sair do Admin
+                    <i class="fa-solid fa-power-off"></i> Sair
                 </li>
             </ul>
         </div>
@@ -697,7 +804,7 @@
             <!-- SAUDAÇÃO DO ADMINISTRADOR -->
             <div class="admin-header">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 61px; height: 61px; object-fit: contain;" onerror="this.style.display='none'">
+                    <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 55px; height: 55px; object-fit: contain;" onerror="this.style.display='none'">
                     <div>
                         <h3 id="admin-name-display">Olá, Administrador!</h3>
                         <span class="text-cinza" style="font-size: 0.8rem;">Painel de Gestão e Controle</span>
@@ -713,8 +820,8 @@
                 <h2>Dashboard</h2>
                 <p class="text-cinza" style="margin-bottom: 20px;">Visão geral do clube de poker</p>
 
-                <!-- BARRA DE FILTROS DE PERÍODO DO DASHBOARD -->
-                <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; align-items: flex-end;">
+                <!-- BARRA DE FILTROS DE PERÍODO DO DASHBOARD (RESPONSIVA) -->
+                <div class="filter-bar">
                     <div style="flex: 1; min-width: 200px;">
                         <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-clock text-laranja"></i> Data/Hora Inicial</label>
                         <input type="datetime-local" id="dash-filtro-inicio" style="margin-bottom:0;">
@@ -725,11 +832,11 @@
                         <input type="datetime-local" id="dash-filtro-fim" style="margin-bottom:0;">
                     </div>
 
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn-primary" onclick="carregarAdminDashboard()" style="width: auto; padding: 12px 20px;">
+                    <div style="display: flex; gap: 10px; width: 100%;">
+                        <button class="btn-primary" onclick="carregarAdminDashboard()" style="flex: 1; padding: 12px 20px;">
                             <i class="fa-solid fa-magnifying-glass"></i> APLICAR FILTROS
                         </button>
-                        <button class="btn-secondary" onclick="limparFiltrosDashboard()" style="width: auto; padding: 12px 20px;">
+                        <button class="btn-secondary" onclick="limparFiltrosDashboard()" style="flex: 1; padding: 12px 20px;">
                             <i class="fa-solid fa-rotate-left"></i> LIMPAR
                         </button>
                     </div>
@@ -761,7 +868,7 @@
 
                 <div class="charts-container">
                     <div class="chart-box">
-                        <h3><i class="fa-solid fa-chart-line text-laranja"></i> Movimentação da Semana</h3>
+                        <h3><i class="fa-solid fa-chart-line text-laranja"></i> Movimentação (Últimos 7 Dias)</h3>
                         <canvas id="chart-movimentacao"></canvas>
                     </div>
                     <div class="chart-box">
@@ -771,9 +878,9 @@
                 </div>
             </div>
 
-            <!-- Solicitações (BOTÃO + ENTREGAR FICHAS DIRETO) -->
+            <!-- Solicitações -->
             <div id="admin-solicitacoes" class="admin-section" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                     <div>
                         <h2>Solicitações de Fichas</h2>
                         <p class="text-cinza">Aprove, recuse ou insira fichas diretamente para um jogador</p>
@@ -791,7 +898,7 @@
 
             <!-- Jogadores -->
             <div id="admin-jogadores" class="admin-section" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                     <div>
                         <h2>Jogadores Cadastrados</h2>
                         <p class="text-cinza">Gerencie o saldo, senhas e cadastros</p>
@@ -812,8 +919,8 @@
                 <h2>Extrato Geral do Clube</h2>
                 <p class="text-cinza" style="margin-bottom: 20px;">Todas as movimentações por jogador, tipo e período exato (incluindo viradas de dia)</p>
                 
-                <!-- BARRA DE FILTROS COM DATETIME-LOCAL -->
-                <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: flex-end;">
+                <!-- BARRA DE FILTROS DO EXTRATO GERAL (RESPONSIVA) -->
+                <div class="filter-bar">
                     <div style="flex: 1; min-width: 180px;">
                         <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-user text-laranja"></i> Jogador</label>
                         <select id="extrato-filtro-jogador" style="margin-bottom:0;">
@@ -840,11 +947,11 @@
                         <input type="datetime-local" id="extrato-filtro-fim" style="margin-bottom:0;">
                     </div>
 
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn-primary" onclick="carregarAdminExtrato()" style="width: auto; padding: 12px 20px;">
+                    <div style="display: flex; gap: 10px; width: 100%;">
+                        <button class="btn-primary" onclick="carregarAdminExtrato()" style="flex: 1; padding: 12px 20px;">
                             <i class="fa-solid fa-magnifying-glass"></i> APLICAR
                         </button>
-                        <button class="btn-secondary" onclick="limparFiltrosExtrato()" style="width: auto; padding: 12px 20px;">
+                        <button class="btn-secondary" onclick="limparFiltrosExtrato()" style="flex: 1; padding: 12px 20px;">
                             <i class="fa-solid fa-rotate-left"></i> LIMPAR
                         </button>
                     </div>
@@ -868,7 +975,7 @@
                 </div>
             </div>
 
-            <!-- Aba Fechamento (SEM O TOTAL COMPRADO) -->
+            <!-- Aba Fechamento -->
             <div id="admin-fechamento" class="admin-section" style="display: none;">
                 <h2><i class="fa-solid fa-flag-checkered text-verde"></i> Fechamento de Sessão</h2>
                 <p class="text-cinza">Encerre a mesa do jogador e calcule com precisão o lucro (+) ou prejuízo (-)</p>
@@ -1355,7 +1462,6 @@
             const dadosMovimentacao = [0, 0, 0, 0, 0, 0, 0];
             const mapDatas = {};
 
-            // Gerar as datas dos últimos 7 dias dinamicamente
             for (let i = 6; i >= 0; i--) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
@@ -1364,11 +1470,10 @@
                 const ano = d.getFullYear();
                 
                 const dataStr = `${dia}/${mes}/${ano}`;
-                labels7Dias.push(`${dia}/${mes}`); // Rótulo curto "DD/MM" no eixo X
-                mapDatas[dataStr] = 6 - i; // Mapeia a data para o índice correto no array
+                labels7Dias.push(`${dia}/${mes}`);
+                mapDatas[dataStr] = 6 - i;
             }
 
-            // Somar as transações reais correspondentes
             if (transactions) {
                 transactions.forEach(t => {
                     const tDate = new Date(t.created_at);
@@ -1388,10 +1493,10 @@
             chartMovimentacao = new Chart(ctxLine, {
                 type: 'line',
                 data: {
-                    labels: labels7Dias, // Rótulos dos últimos 7 dias reais
+                    labels: labels7Dias,
                     datasets: [{
                         label: 'Movimentação (R$)',
-                        data: dadosMovimentacao, // Valores calculados do banco
+                        data: dadosMovimentacao,
                         borderColor: '#FF6A00',
                         backgroundColor: 'rgba(255, 106, 0, 0.1)',
                         fill: true,
@@ -1490,7 +1595,6 @@
                 return mostrarToast('Por favor, selecione um jogador e informe uma quantidade válida de fichas.', 'alerta');
             }
 
-            // 1. Criar a solicitação já no status 'Aprovada'
             const { error: reqError } = await _supabase.from('requests').insert([{
                 player_id: playerId,
                 amount: valor,
@@ -1504,13 +1608,11 @@
                 return;
             }
 
-            // 2. Buscar e creditar saldo diretamente no jogador
             const { data: player } = await _supabase.from('players').select('balance').eq('id', playerId).single();
             const novoSaldo = parseFloat(player.balance || 0) + parseFloat(valor);
 
             await _supabase.from('players').update({ balance: novoSaldo }).eq('id', playerId);
 
-            // 3. Registrar no extrato como aprovado via Adm
             await _supabase.from('transactions').insert([{
                 player_id: playerId,
                 type: 'Entrada de fichas (Via Adm)',

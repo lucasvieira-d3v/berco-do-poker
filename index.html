@@ -64,7 +64,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 99999;
+            z-index: 999999;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -180,22 +180,34 @@
             border: 1px solid rgba(255,255,255,0.12);
         }
 
-        /* --- INPUTS E SELECTS RESPONSIVOS --- */
+        /* --- INPUTS E SELECTS COMPACTOS E PROPORCIONAIS --- */
         input, select {
             width: 100%;
-            padding: 12px 14px;
-            background-color: var(--preto);
-            border: 1px solid rgba(255,255,255,0.12);
+            height: 42px;
+            padding: 8px 12px;
+            background-color: #000000;
+            border: 1px solid rgba(255,255,255,0.18);
             color: var(--branco);
             border-radius: 8px;
             outline: none;
-            font-size: 16px; /* Evita auto-zoom em mobile/iOS */
+            font-size: 15px;
+            box-sizing: border-box;
             transition: border-color 0.3s;
+        }
+
+        input[type="datetime-local"], input[type="date"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: #141414;
+            color: #ffffff;
+            height: 42px;
+            line-height: 1.2;
         }
 
         input[type="date"]::-webkit-calendar-picker-indicator,
         input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.8);
+            filter: invert(0.9);
             cursor: pointer;
         }
 
@@ -204,14 +216,14 @@
             box-shadow: 0 0 8px rgba(255, 106, 0, 0.3);
         }
 
-        /* --- ESTRUTURA REFORMULADA DE BARRA DE FILTROS --- */
+        /* --- ESTRUTURA DE BARRA DE FILTROS --- */
         .filter-bar {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-            gap: 14px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
             background-color: var(--cinza-painel);
-            padding: 18px;
+            padding: 16px;
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.06);
             align-items: end;
@@ -220,24 +232,24 @@
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         .filter-group label {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--cinza-claro);
             font-weight: 500;
         }
 
         .filter-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .filter-actions button {
-            height: 46px;
-            padding: 0 18px;
-            font-size: 0.9rem;
+            height: 42px;
+            padding: 0 16px;
+            font-size: 0.88rem;
         }
 
         /* --- VIEWS / TELAS --- */
@@ -277,7 +289,7 @@
             align-items: center;
             margin-bottom: 20px;
             background-color: var(--cinza-painel);
-            padding: 14px 18px;
+            padding: 12px 18px;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -299,8 +311,8 @@
             font-weight: 800;
         }
 
-        /* --- ÁREA DO ADMINISTRADOR --- */
-        #admin-view { flex-direction: row; }
+        /* --- ÁREA DO ADMINISTRADOR & SIDEBAR MOBILE DRAWER --- */
+        #admin-view { flex-direction: row; position: relative; }
 
         .sidebar {
             width: 250px;
@@ -345,14 +357,14 @@
         /* CARDS E TABELAS */
         .dashboard-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 18px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
         }
 
         .stat-card {
             background-color: var(--cinza-painel);
-            padding: 20px;
+            padding: 18px;
             border-radius: 14px;
             border-left: 4px solid var(--laranja-principal);
             box-shadow: var(--sombra-card);
@@ -361,38 +373,38 @@
 
         .stat-card i {
             position: absolute;
-            right: 18px;
-            top: 18px;
-            font-size: 1.6rem;
+            right: 16px;
+            top: 16px;
+            font-size: 1.5rem;
             color: rgba(255,255,255,0.08);
         }
 
         .stat-card h3 {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--cinza-claro);
             margin-bottom: 6px;
             text-transform: uppercase;
         }
 
-        .stat-card h2 { font-size: 1.6rem; font-weight: 700; }
+        .stat-card h2 { font-size: 1.5rem; font-weight: 700; }
 
         .charts-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin-bottom: 22px;
         }
 
         .chart-box {
             background-color: var(--cinza-painel);
-            padding: 20px;
+            padding: 18px;
             border-radius: 14px;
             border: 1px solid rgba(255,255,255,0.05);
         }
 
         .chart-box h3 {
-            font-size: 0.95rem;
-            margin-bottom: 15px;
+            font-size: 0.92rem;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -401,7 +413,7 @@
         .table-container {
             background-color: var(--cinza-painel);
             border-radius: 14px;
-            padding: 16px;
+            padding: 14px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             box-shadow: var(--sombra-card);
@@ -431,7 +443,7 @@
         /* ABA DE FECHAMENTO */
         .fechamento-container {
             background-color: var(--cinza-painel);
-            padding: 24px;
+            padding: 20px;
             border-radius: 14px;
             max-width: 600px;
             margin-top: 15px;
@@ -441,9 +453,9 @@
 
         .fechamento-info {
             background-color: var(--preto);
-            padding: 16px;
+            padding: 14px;
             border-radius: 10px;
-            margin: 15px 0;
+            margin: 14px 0;
             border: 1px solid var(--cinza-hover);
         }
 
@@ -452,15 +464,15 @@
 
         .resultado-box {
             text-align: center;
-            padding: 20px;
-            margin: 18px 0;
+            padding: 18px;
+            margin: 16px 0;
             border: 2px dashed var(--cinza-claro);
             border-radius: 12px;
         }
 
         .resultado-box.positivo { border-color: var(--verde-sucesso); background-color: rgba(76, 175, 80, 0.08); }
         .resultado-box.negativo { border-color: var(--vermelho-erro); background-color: rgba(244, 67, 54, 0.08); }
-        .resultado-box h2 { font-size: 2.1rem; margin: 6px 0; font-weight: 800; }
+        .resultado-box h2 { font-size: 2rem; margin: 6px 0; font-weight: 800; }
 
         /* MODAIS */
         .modal {
@@ -477,7 +489,7 @@
 
         .modal-content {
             background-color: var(--cinza-painel);
-            padding: 25px 20px;
+            padding: 22px 18px;
             border-radius: 16px;
             width: 100%;
             max-width: 420px;
@@ -487,77 +499,98 @@
             overflow-y: auto;
         }
 
-        /* --- RESPONSIVIDADE COMPLETA E PERFEITA (MOBILE) --- */
-        @media (max-width: 768px) {
-            #toast-container {
-                top: 10px;
-                right: 10px;
-                left: 10px;
-            }
+        /* --- BOTÃO MENU HAMBÚRGUER & DRAWER SLIDE MOBILE --- */
+        .mobile-menu-btn {
+            display: none;
+            background: var(--cinza-hover);
+            color: var(--laranja-principal);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 12px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+        }
 
-            .toast {
-                min-width: 100%;
-                font-size: 0.85rem;
-                padding: 12px 14px;
-            }
+        .sidebar-header-mobile {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px 15px 20px;
+            border-bottom: 1px solid var(--cinza-painel);
+        }
+
+        .sidebar-header-mobile span {
+            font-weight: 700;
+            color: var(--laranja-principal);
+            font-size: 0.95rem;
+        }
+
+        .sidebar-header-mobile button {
+            background: transparent;
+            color: var(--cinza-claro);
+            font-size: 1.2rem;
+            padding: 4px;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(4px);
+            z-index: 9998;
+        }
+
+        /* RESPONSIVIDADE MOBILE PERFEITA */
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: inline-flex; }
+            .sidebar-header-mobile { display: flex; }
+
+            .sidebar-overlay.active { display: block; }
 
             #admin-view { flex-direction: column; }
 
+            /* A sidebar vira um painel deslizante elegante à esquerda no celular */
             .sidebar {
-                width: 100%;
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 6px;
-                border-right: none;
-                border-bottom: 1px solid var(--cinza-painel);
-                position: sticky;
+                position: fixed;
                 top: 0;
-                z-index: 100;
+                left: -280px;
+                width: 260px;
+                height: 100vh;
+                z-index: 9999;
+                transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                box-shadow: 5px 0 25px rgba(0,0,0,0.8);
             }
 
-            .sidebar-logo { display: none; }
-            .sidebar ul { display: flex; margin-top: 0; gap: 4px; }
-            .sidebar ul li { 
-                border-left: none; 
-                border-bottom: 3px solid transparent; 
-                white-space: nowrap; 
-                padding: 10px 14px; 
-                font-size: 0.85rem;
+            .sidebar.open {
+                left: 0;
             }
-
-            .sidebar ul li:hover, .sidebar ul li.active { border-left: none; border-bottom-color: var(--laranja-principal); }
-            .sidebar ul li.highlight { border-left: none; border-bottom-color: var(--verde-sucesso); }
 
             .admin-content { 
                 height: auto; 
-                padding: 15px 12px; 
+                padding: 14px 12px; 
                 overflow-y: visible;
             }
 
             .player-header, .admin-header {
-                padding: 12px 14px;
-                gap: 10px;
+                padding: 10px 14px;
             }
 
             .player-header h3, .admin-header h3 {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
             }
 
-            /* Adaptação das barras de filtros em formato de pilha no celular */
             .filter-bar {
                 grid-template-columns: 1fr;
-                gap: 12px;
-                padding: 14px;
+                gap: 10px;
+                padding: 12px;
             }
 
             .filter-actions {
                 width: 100%;
-                flex-direction: row;
             }
 
             .filter-actions button {
                 flex: 1;
-                width: 100%;
             }
 
             .dashboard-cards {
@@ -567,15 +600,11 @@
 
             .charts-container {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 14px;
             }
 
             .card-saldo h1 {
-                font-size: 2.2rem;
-            }
-
-            .fechamento-container {
-                padding: 18px 14px;
+                font-size: 2.1rem;
             }
         }
     </style>
@@ -584,6 +613,9 @@
 
     <!-- CONTAINER DE TOASTS NOTIFICAÇÕES -->
     <div id="toast-container"></div>
+
+    <!-- MASCARA DE SOMBRA DO MENU MOBILE -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <!-- 1. TELA DE LOGIN -->
     <div id="login-view" class="view active">
@@ -616,7 +648,7 @@
     <div id="player-view" class="view">
         <div class="player-header">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 48px; height: 48px; object-fit: contain;" onerror="this.style.display='none'">
+                <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 44px; height: 44px; object-fit: contain;" onerror="this.style.display='none'">
                 <div>
                     <h3 id="player-name-display">Olá, Jogador!</h3>
                     <span class="text-cinza" style="font-size: 0.78rem;">Área do Jogador</span>
@@ -638,7 +670,7 @@
 
         <!-- SOLICITAÇÕES PENDENTES DO JOGADOR -->
         <div id="player-pendentes-container" style="display: none; margin-bottom: 20px;">
-            <h3 style="margin-bottom: 10px; font-size: 0.95rem;"><i class="fa-solid fa-clock text-laranja"></i> Solicitações em Andamento</h3>
+            <h3 style="margin-bottom: 10px; font-size: 0.92rem;"><i class="fa-solid fa-clock text-laranja"></i> Solicitações em Andamento</h3>
             <div class="table-container">
                 <table id="player-pendentes-table">
                     <!-- Preenchido via JS -->
@@ -646,8 +678,8 @@
             </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: 25px 0 12px 0;">
-            <h3 style="font-size: 0.95rem;"><i class="fa-solid fa-receipt text-laranja"></i> Meu Extrato</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0;">
+            <h3 style="font-size: 0.92rem;"><i class="fa-solid fa-receipt text-laranja"></i> Meu Extrato</h3>
             <span class="text-cinza" style="font-size: 0.78rem;">Histórico das sessões</span>
         </div>
 
@@ -682,8 +714,13 @@
 
     <!-- 3. TELA DO ADMINISTRADOR -->
     <div id="admin-view" class="view">
-        <!-- Sidebar -->
-        <div class="sidebar">
+        <!-- Sidebar Drawer -->
+        <div class="sidebar" id="sidebar-menu">
+            <div class="sidebar-header-mobile">
+                <span>BERÇO DO POKER</span>
+                <button onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
             <img src="berco-do-poker-3d-realista.png" alt="Logo Berço do Poker" class="sidebar-logo" onerror="this.src='https://via.placeholder.com/165/080808/FF6A00?text=LOGO'">
             <ul>
                 <li class="admin-menu-item active" onclick="mudarAbaAdmin('dashboard', event)">
@@ -702,7 +739,7 @@
                     <i class="fa-solid fa-flag-checkered"></i> Fechamento
                 </li>
                 <li onclick="logout()" style="margin-top: auto; color: var(--vermelho-erro);">
-                    <i class="fa-solid fa-power-off"></i> Sair
+                    <i class="fa-solid fa-power-off"></i> Sair do Admin
                 </li>
             </ul>
         </div>
@@ -713,7 +750,11 @@
             <!-- SAUDAÇÃO DO ADMINISTRADOR -->
             <div class="admin-header">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 48px; height: 48px; object-fit: contain;" onerror="this.style.display='none'">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()" title="Abrir Menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+
+                    <img src="berco-do-poker-3d-realista.png" alt="Logo" style="width: 44px; height: 44px; object-fit: contain;" onerror="this.style.display='none'">
                     <div>
                         <h3 id="admin-name-display">Olá, Administrador!</h3>
                         <span class="text-cinza" style="font-size: 0.78rem;">Painel de Gestão e Controle</span>
@@ -890,7 +931,7 @@
                 <p class="text-cinza" style="font-size: 0.88rem;">Encerre a mesa do jogador e calcule com precisão o resultado</p>
 
                 <div class="fechamento-container">
-                    <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-user"></i> Selecione o Jogador para Encerramento</label>
+                    <label style="color: var(--cinza-claro); font-size: 0.82rem;"><i class="fa-solid fa-user"></i> Selecione o Jogador para Encerramento</label>
                     <select id="fechamento-select" onchange="calcularFechamento()" style="margin-top: 4px; margin-bottom: 12px;"></select>
 
                     <div class="fechamento-info">
@@ -898,7 +939,7 @@
                         <strong id="fechamento-saldo-sistema" class="text-laranja">R$ 0,00</strong>
                     </div>
 
-                    <label style="color: var(--cinza-claro); font-size: 0.85rem;"><i class="fa-solid fa-coins"></i> Com quantas fichas o jogador está saindo da mesa? (R$)</label>
+                    <label style="color: var(--cinza-claro); font-size: 0.82rem;"><i class="fa-solid fa-coins"></i> Com quantas fichas o jogador está saindo da mesa? (R$)</label>
                     <input type="number" id="fechamento-input-saida" placeholder="Ex: 1500" onkeyup="calcularFechamento()" onchange="calcularFechamento()" style="margin-top: 4px; margin-bottom: 12px;">
 
                     <div id="fechamento-resultado-box" class="resultado-box">
@@ -1049,6 +1090,23 @@
         let chartMovimentacao = null;
         let chartSolicitacoes = null;
 
+        // --- SISTEMA DE NAVEGAÇÃO MOBILE (MENU DRAWER) ---
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar-menu');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function fecharSidebarMobile() {
+            const sidebar = document.getElementById('sidebar-menu');
+            const overlay = document.getElementById('sidebar-overlay');
+            if(sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+        }
+
         // --- SISTEMA DE TOASTS ANIMADOS ---
         function mostrarToast(mensagem, tipo = 'sucesso') {
             const container = document.getElementById('toast-container');
@@ -1124,13 +1182,15 @@
             document.getElementById(viewId).classList.add('active');
         }
 
+        // --- LOGIN INSENSÍVEL A MAIÚSCULAS/MINÚSCULAS ---
         async function fazerLogin() {
             const inputPhone = document.getElementById('login-input').value.trim();
             const inputPassword = document.getElementById('login-password-input').value.trim();
 
             if(!inputPhone) return mostrarToast('Por favor, digite o seu telefone ou "admin".', 'alerta');
 
-            const cleanPhone = inputPhone.toLowerCase() === 'admin' ? 'admin' : inputPhone.replace(/\D/g, '');
+            const inputLower = inputPhone.toLowerCase();
+            const cleanPhoneInput = inputLower.replace(/\D/g, '');
 
             const { data: players, error } = await _supabase.from('players').select('*');
 
@@ -1139,7 +1199,17 @@
                 return mostrarToast('Erro ao conectar ao banco Supabase.', 'erro');
             }
 
-            const player = players.find(p => p.phone.replace(/\D/g, '') === cleanPhone || p.phone === inputPhone);
+            // Comparação insensível a maiúsculas/minúsculas para Telefone, "admin" ou Nome
+            const player = players.find(p => {
+                const pPhoneClean = (p.phone || '').replace(/\D/g, '').toLowerCase();
+                const pPhoneRaw = (p.phone || '').toLowerCase();
+                const pNameRaw = (p.name || '').toLowerCase();
+
+                return (inputLower === 'admin' && pPhoneRaw === 'admin')
+                    || (cleanPhoneInput && pPhoneClean === cleanPhoneInput)
+                    || pPhoneRaw === inputLower
+                    || pNameRaw === inputLower;
+            });
 
             if (player) {
                 if (player.role === 'admin') {
@@ -1172,6 +1242,7 @@
             document.getElementById('login-input').value = '';
             document.getElementById('login-password-input').value = '';
             mostrarView('login-view');
+            fecharSidebarMobile();
             mostrarToast('Sessão encerrada com sucesso.', 'alerta');
         }
 
@@ -1302,6 +1373,8 @@
             if(evt && evt.currentTarget) {
                 evt.currentTarget.classList.add('active');
             }
+
+            fecharSidebarMobile(); // Fecha a gaveta lateral no mobile ao clicar em um menu
 
             if(aba === 'dashboard') carregarAdminDashboard();
             if(aba === 'solicitacoes') carregarAdminSolicitacoes();

@@ -487,6 +487,11 @@
             padding: 15px;
         }
 
+        /* Camada elevada para garantir que a confirmação apareça sobre qualquer modal aberto */
+        #modal-confirmacao {
+            z-index: 1000005 !important;
+        }
+
         .modal-content {
             background-color: var(--cinza-painel);
             padding: 22px 18px;
@@ -540,16 +545,14 @@
             z-index: 9998;
         }
 
-        /* RESPONSIVIDADE MOBILE PERFEITA */
+        /* RESPONSIVIDADE MOBILE */
         @media (max-width: 768px) {
             .mobile-menu-btn { display: inline-flex; }
             .sidebar-header-mobile { display: flex; }
-
             .sidebar-overlay.active { display: block; }
 
             #admin-view { flex-direction: column; }
 
-            /* A sidebar vira um painel deslizante elegante à esquerda no celular */
             .sidebar {
                 position: fixed;
                 top: 0;
@@ -1199,7 +1202,6 @@
                 return mostrarToast('Erro ao conectar ao banco Supabase.', 'erro');
             }
 
-            // Comparação insensível a maiúsculas/minúsculas para Telefone, "admin" ou Nome
             const player = players.find(p => {
                 const pPhoneClean = (p.phone || '').replace(/\D/g, '').toLowerCase();
                 const pPhoneRaw = (p.phone || '').toLowerCase();
@@ -1374,7 +1376,7 @@
                 evt.currentTarget.classList.add('active');
             }
 
-            fecharSidebarMobile(); // Fecha a gaveta lateral no mobile ao clicar em um menu
+            fecharSidebarMobile();
 
             if(aba === 'dashboard') carregarAdminDashboard();
             if(aba === 'solicitacoes') carregarAdminSolicitacoes();
@@ -1638,7 +1640,7 @@
             carregarAdminSolicitacoes();
         }
 
-        // --- GESTÃO DE JOGADORES, EDIÇÃO E EXCLUSÃO ---
+        // --- GESTÃO DE JOGADORES, EDIÇÃO E EXCLUSÃO (CORRIGIDA) ---
         async function carregarAdminJogadores() {
             const { data: players } = await _supabase.from('players').select('*').order('name');
             const tb = document.getElementById('admin-jogadores-table');
@@ -1732,25 +1734,74 @@
             }
         }
 
+        // Exclusão com verificação de valores em aberto e limpeza de vínculos
         async function excluirJogador() {
             const id = document.getElementById('editar-player-id').value;
-            const nome = document.getElementById('editar-nome').value;
+            const nome = document.getElementById('editar-nome').value.trim();
 
-            const confirmacao = await mostrarConfirmacao(`Tem certeza que deseja excluir permanentemente o jogador "${nome}"?\nTodas as suas solicitações e extratos serão removidos do sistema.`, 'Excluir Jogador');
-            if(!confirmacao) return;
+            if (!id) return;
 
+            // 1. Busca dados atualizados do jogador para verificar o saldo
+            const { data: player, error: playerErr } = await _supabase
+                .from('players')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (playerErr || !player) {
+                return mostrarToast('Erro ao consultar dados do jogador no banco.', 'erro');
+            }
+
+            const saldo = parseFloat(player.balance || 0);
+
+            // 2. Verifica se existem solicitações de fichas pendentes
+            const { data: pendentes } = await _supabase
+                .from('requests')
+                .select('id, amount')
+                .eq('player_id', id)
+                .eq('status', 'Pendente');
+
+            const temPendentes = pendentes && pendentes.length > 0;
+
+            // 3. Monta o alerta caso existam valores em aberto
+            let avisoValores = '';
+            if (saldo > 0) {
+                avisoValores += `\n\n⚠️ ATENÇÃO: Este jogador ainda possui SALDO EM ABERTO de ${formatarMoeda(saldo)} em mesa!`;
+            } else if (saldo < 0) {
+                avisoValores += `\n\n⚠️ ATENÇÃO: Este jogador possui DÉBITO EM ABERTO de ${formatarMoeda(Math.abs(saldo))}!`;
+            }
+
+            if (temPendentes) {
+                avisoValores += `\n⚠️ Existem solicitações de fichas pendentes de aprovação para ele!`;
+            }
+
+            const mensagemFinal = `Tem certeza que deseja excluir permanentemente o jogador "${nome}"?${avisoValores}\n\nTodos os registros, extratos e histórico vinculados serão removidos do sistema.`;
+
+            const confirmacao = await mostrarConfirmacao(
+                mensagemFinal, 
+                (saldo !== 0 || temPendentes) ? 'Valores em Aberto Detectados' : 'Excluir Jogador'
+            );
+
+            if (!confirmacao) return;
+
+            // 4. Remove transações e solicitações primeiro (evita travamento por Foreign Key)
+            await _supabase.from('transactions').delete().eq('player_id', id);
+            await _supabase.from('requests').delete().eq('player_id', id);
+
+            // 5. Exclui o jogador
             const { error } = await _supabase
                 .from('players')
                 .delete()
                 .eq('id', id);
 
-            if(error) {
+            if (error) {
                 mostrarToast('Erro ao excluir jogador do banco de dados.', 'erro');
                 console.error(error);
             } else {
-                mostrarToast('Jogador excluído com sucesso!', 'sucesso');
+                mostrarToast(`Jogador "${nome}" excluído com sucesso!`, 'sucesso');
                 fecharModais();
                 carregarAdminJogadores();
+                carregarAdminDashboard();
             }
         }
 

@@ -487,7 +487,7 @@
             padding: 15px;
         }
 
-        /* Camada prioritária para garantir visibilidade da confirmação */
+        /* Camada prioritária máxima para a confirmação de exclusão */
         #modal-confirmacao {
             z-index: 9999999 !important;
         }
@@ -742,7 +742,7 @@
                     <i class="fa-solid fa-flag-checkered"></i> Fechamento
                 </li>
                 <li onclick="logout()" style="margin-top: auto; color: var(--vermelho-erro);">
-                    <i class="fa-solid fa-power-off"></i> Sair
+                    <i class="fa-solid fa-power-off"></i> Sair do Admin
                 </li>
             </ul>
         </div>
@@ -959,10 +959,13 @@
         </div>
     </div>
 
-    <!-- MODAL DE CONFIRMAÇÃO VIP (CAMADA MÁXIMA DE SOBREPOSIÇÃO) -->
+    <!-- MODAL DE CONFIRMAÇÃO VIP COM ÍCONE DE NAIPE (ESPADAS INICIAL PADRÃO) -->
     <div id="modal-confirmacao" class="modal">
         <div class="modal-content">
-            <h3 style="margin-bottom: 10px;" id="confirm-titulo"><i class="fa-solid fa-circle-question text-laranja"></i> Confirmação</h3>
+            <h3 style="margin-bottom: 10px;" id="confirm-titulo">
+                <svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align: -2px; fill: var(--laranja-principal); display: inline-block;"><path d="M12,2C9,7 4,9 4,14C4,16.2 5.8,18 8,18C9.3,18 10.4,17.4 11.2,16.4C11.1,17.4 10.8,19 9,20H15C13.2,19 12.9,17.4 12.8,16.4C13.6,17.4 14.7,18 16,18C18.2,18 20,16.2 20,14C20,9 15,7 12,2Z"/></svg>
+                <span style="vertical-align: middle; margin-left: 6px;">Confirmação</span>
+            </h3>
             <p class="text-cinza" id="confirm-mensagem" style="font-size: 0.92rem; margin-bottom: 20px; line-height: 1.5; white-space: pre-line;"></p>
 
             <div style="display: flex; gap: 10px;">
@@ -1054,7 +1057,7 @@
 
                 <div style="display: flex; gap: 10px;">
                     <button class="btn-secondary" style="flex: 1;" onclick="fecharModais()">CANCELAR</button>
-                    <button class="btn-danger" style="flex: 1;" onclick="excluirJogador()">
+                    <button id="btn-excluir-jogador" class="btn-danger" style="flex: 1;" onclick="excluirJogador()">
                         <i class="fa-solid fa-trash"></i> EXCLUIR
                     </button>
                 </div>
@@ -1093,6 +1096,19 @@
         let chartMovimentacao = null;
         let chartSolicitacoes = null;
 
+        // --- NAIPES VETORIAIS (SVG) EM LARANJA PARA EVITAR ERROS DE CARACTERE E CAIXA COM "?" ---
+        const naipesConfirmacao = [
+            // 1. Espadas (Spade)
+            '<svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align: -2px; fill: var(--laranja-principal); display: inline-block;"><path d="M12,2C9,7 4,9 4,14C4,16.2 5.8,18 8,18C9.3,18 10.4,17.4 11.2,16.4C11.1,17.4 10.8,19 9,20H15C13.2,19 12.9,17.4 12.8,16.4C13.6,17.4 14.7,18 16,18C18.2,18 20,16.2 20,14C20,9 15,7 12,2Z"/></svg>',
+            // 2. Copas (Heart)
+            '<svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align: -2px; fill: var(--laranja-principal); display: inline-block;"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>',
+            // 3. Ouros (Diamond)
+            '<svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align: -2px; fill: var(--laranja-principal); display: inline-block;"><path d="M12,2L4.5,12L12,22L19.5,12L12,2Z"/></svg>',
+            // 4. Paus (Club)
+            '<svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align: -2px; fill: var(--laranja-principal); display: inline-block;"><path d="M19.5,10.5C18.6,10.5 17.8,10.9 17.2,11.5C17.7,10.5 18,9.3 18,8C18,4.7 15.3,2 12,2C8.7,2 6,4.7 6,8C6,9.3 6.3,10.5 6.8,11.5C6.2,10.9 5.4,10.5 4.5,10.5C2.6,10.5 1,12.1 1,14C1,15.9 2.6,17.5 4.5,17.5C5.5,17.5 6.4,17.1 7,16.5C7.2,17.7 8.2,19.2 10,20H14C15.8,19.2 16.8,17.7 17,16.5C17.6,17.1 18.5,17.5 19.5,17.5C21.4,17.5 23,15.9 23,14C23,12.1 21.4,10.5 19.5,10.5Z"/></svg>'
+        ];
+        let naipeIndex = 0;
+
         // --- SISTEMA DE NAVEGAÇÃO MOBILE (MENU DRAWER) ---
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar-menu');
@@ -1129,13 +1145,21 @@
             }, 3200);
         }
 
-        // --- SISTEMA DE CONFIRMAÇÃO PROMISE ---
+        // --- SISTEMA DE CONFIRMAÇÃO PROMISE COM NAIPES ALTERNADOS E SEGUROS ---
         function mostrarConfirmacao(mensagem, titulo = 'Confirmação') {
             return new Promise((resolve) => {
                 const modal = document.getElementById('modal-confirmacao');
-                document.getElementById('confirm-titulo').innerHTML = `<i class="fa-solid fa-circle-question text-laranja"></i> ${titulo}`;
+                
+                // Escolhe o próximo naipe alternado e avança o contador
+                const naipeSvg = naipesConfirmacao[naipeIndex % naipesConfirmacao.length];
+                naipeIndex++;
+
+                // Monta o cabeçalho alinhado e elegante
+                document.getElementById('confirm-titulo').innerHTML = `${naipeSvg} <span style="vertical-align: middle; margin-left: 6px;">${titulo}</span>`;
                 document.getElementById('confirm-mensagem').innerText = mensagem;
+                
                 modal.style.display = 'flex';
+                modal.style.zIndex = '9999999';
 
                 const btnSim = document.getElementById('confirm-btn-sim');
                 const btnNao = document.getElementById('confirm-btn-nao');
@@ -1256,7 +1280,6 @@
             document.getElementById('player-name-display').innerText = `Olá, ${player.name.split(' ')[0]}!`;
             document.getElementById('player-balance-display').innerText = formatarMoeda(player.balance);
 
-            // 1. Carregar Solicitações Pendentes do Jogador
             const { data: pendentes } = await _supabase
                 .from('requests')
                 .select('*')
@@ -1288,7 +1311,6 @@
                 containerPendentes.style.display = 'none';
             }
 
-            // 2. Carregar Extrato de Transações do Jogador
             const { data: transactions } = await _supabase
                 .from('transactions')
                 .select('*')
@@ -1734,69 +1756,70 @@
             }
         }
 
-        // Exclusão com verificação de valores em aberto e ocultação do modal pai
         async function excluirJogador() {
             const id = document.getElementById('editar-player-id').value;
             const nome = document.getElementById('editar-nome').value.trim();
+            const btnExcluir = document.getElementById('btn-excluir-jogador');
 
             if (!id) return;
 
-            // Fecha a janela de edição para liberar o foco na confirmação
-            document.getElementById('modal-editar-jogador').style.display = 'none';
-
-            // 1. Busca dados do jogador para checar saldo
-            const { data: player, error: playerErr } = await _supabase
-                .from('players')
-                .select('*')
-                .eq('id', id)
-                .single();
-
-            if (playerErr || !player) {
-                document.getElementById('modal-editar-jogador').style.display = 'flex';
-                return mostrarToast('Erro ao consultar dados do jogador no banco.', 'erro');
-            }
-
-            const saldo = parseFloat(player.balance || 0);
-
-            // 2. Busca solicitações pendentes
-            const { data: pendentes } = await _supabase
-                .from('requests')
-                .select('id, amount')
-                .eq('player_id', id)
-                .eq('status', 'Pendente');
-
-            const temPendentes = pendentes && pendentes.length > 0;
-
-            // 3. Monta o alerta caso existam valores em aberto
-            let avisoValores = '';
-            let tituloConfirmacao = 'Excluir Jogador';
-
-            if (saldo > 0) {
-                avisoValores += `\n\n⚠️ ATENÇÃO: Este jogador possui ${formatarMoeda(saldo)} EM SALDO ABERTO no clube!`;
-                tituloConfirmacao = 'Jogador com Saldo Aberto';
-            } else if (saldo < 0) {
-                avisoValores += `\n\n⚠️ ATENÇÃO: Este jogador possui DÉBITO ABERTO de ${formatarMoeda(Math.abs(saldo))}!`;
-                tituloConfirmacao = 'Jogador com Débito Aberto';
-            }
-
-            if (temPendentes) {
-                const totalPendentes = pendentes.reduce((acc, r) => acc + parseFloat(r.amount || 0), 0);
-                avisoValores += `\n⚠️ Existem solicitações pendentes no valor de ${formatarMoeda(totalPendentes)}!`;
-                tituloConfirmacao = 'Solicitações em Aberto';
-            }
-
-            const mensagem = `Deseja realmente excluir permanentemente o jogador "${nome}"?${avisoValores}\n\nTodos os registros, extratos e histórico vinculados a ele serão apagados.`;
-
-            const confirmou = await mostrarConfirmacao(mensagem, tituloConfirmacao);
-
-            if (!confirmou) {
-                // Se cancelou, reabre a janela de edição
-                document.getElementById('modal-editar-jogador').style.display = 'flex';
-                return;
-            }
-
-            // Se confirmou, apaga os registros vinculados e em seguida o jogador
             try {
+                const textoOriginal = btnExcluir.innerHTML;
+                btnExcluir.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> VERIFICANDO...';
+                btnExcluir.disabled = true;
+
+                const { data: player, error: playerErr } = await _supabase
+                    .from('players')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+
+                if (playerErr || !player) {
+                    btnExcluir.innerHTML = textoOriginal;
+                    btnExcluir.disabled = false;
+                    return mostrarToast('Erro ao consultar dados do jogador no banco.', 'erro');
+                }
+
+                const saldo = parseFloat(player.balance || 0);
+
+                const { data: pendentes } = await _supabase
+                    .from('requests')
+                    .select('id, amount')
+                    .eq('player_id', id)
+                    .eq('status', 'Pendente');
+
+                const temPendentes = pendentes && pendentes.length > 0;
+
+                btnExcluir.innerHTML = textoOriginal;
+                btnExcluir.disabled = false;
+
+                document.getElementById('modal-editar-jogador').style.display = 'none';
+
+                let avisoValores = '';
+                let tituloConfirmacao = 'Excluir Jogador';
+
+                if (saldo > 0) {
+                    avisoValores += `\n\n⚠️ ATENÇÃO: Este jogador possui ${formatarMoeda(saldo)} EM SALDO ABERTO no clube!`;
+                    tituloConfirmacao = 'Aviso de Saldo em Aberto';
+                } else if (saldo < 0) {
+                    avisoValores += `\n\n⚠️ ATENÇÃO: Este jogador possui DÉBITO ABERTO de ${formatarMoeda(Math.abs(saldo))}!`;
+                    tituloConfirmacao = 'Aviso de Débito em Aberto';
+                }
+
+                if (temPendentes) {
+                    const totalPendentes = pendentes.reduce((acc, r) => acc + parseFloat(r.amount || 0), 0);
+                    avisoValores += `\n⚠️ Existem solicitações de fichas pendentes (${formatarMoeda(totalPendentes)})!`;
+                }
+
+                const mensagem = `Deseja realmente excluir permanentemente o jogador "${nome}"?${avisoValores}\n\nTodos os registros, solicitações e extratos vinculados a ele serão apagados do sistema.`;
+
+                const confirmou = await mostrarConfirmacao(mensagem, tituloConfirmacao);
+
+                if (!confirmou) {
+                    document.getElementById('modal-editar-jogador').style.display = 'flex';
+                    return;
+                }
+
                 await _supabase.from('transactions').delete().eq('player_id', id);
                 await _supabase.from('requests').delete().eq('player_id', id);
 
@@ -1816,8 +1839,10 @@
                     carregarAdminDashboard();
                 }
             } catch (err) {
-                console.error(err);
-                mostrarToast('Erro inesperado ao excluir jogador.', 'erro');
+                console.error("Erro inesperado na exclusão:", err);
+                mostrarToast('Erro inesperado no sistema.', 'erro');
+                btnExcluir.innerHTML = '<i class="fa-solid fa-trash"></i> EXCLUIR';
+                btnExcluir.disabled = false;
                 document.getElementById('modal-editar-jogador').style.display = 'flex';
             }
         }
